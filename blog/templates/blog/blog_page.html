@@ -1,0 +1,97 @@
+{% extends "./base.html" %}
+<!-- If you use ---extends-- in a template, it must be the first template tag in that template. Template inheritance won’t work, otherwise. -->
+{% load static %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block mainContent %}
+    <article>
+        <h1>{{ post.title }}</h1>
+        <section>
+            {{ post.body|safe}}        
+        </section>
+    </article>
+{% endblock mainContent %}
+{% block postMeta %}
+    <script src="//at.alicdn.com/t/c/font_361361_aob2h8fggc7.js"
+            type="text/javascript">
+                // https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=361361
+            </script>
+    <div id="postInfo">
+        <!-- 博文分类，有些没有分类的文章没有post.category，所以要用if核实一下，以免下一行的操作出问题-->
+        {% if post.category %}
+        <a href="{% url 'blog:category' post.category %}"
+                       id="catogory">
+                        <svg class="icon" aria-hidden="true">
+                            <title>分类</title>
+                            <use xlink:href="#icon-fenlei2"></use>
+                        </svg>
+                    {{ post.category }}
+        </a>
+        {% endif%}
+        <!-- 阅读统计 -->
+        <div id="{{ post.slug }}" class="leancloud_visitors">
+            <svg class="icon" aria-hidden="true">
+                <title>查看量</title>
+                <use xlink:href="#icon-yuedu1"></use>
+            </svg>
+            <span class="leancloud-visitors-count"></span>
+        </div>
+        <!-- 修订日期 -->
+        <div>
+                <svg class="icon" aria-hidden="true">
+                    <title>修订日期</title>
+                    <use xlink:href="#icon-history"></use>
+                </svg>
+                <span class="post-date">{{ post.latestRevisionDate|date:"Y-n-j" }}</span>
+            </div>
+
+        <!--  编辑 -->
+        {% if request.user.is_authenticated %}
+            <a href="/admin/blog/post/{{ post.id }}/change/" rel="nofollow">
+                <svg class="icon" aria-hidden="true" id="icon-bianji">
+                    <title>编辑</title>
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-bianji4"></use>
+                </svg>
+            </a>
+        {% endif %}
+    </div>
+    
+{% if post.category == '高等数学' %}
+                    <div id="promotion">
+                        <img src="http://files.cnblogs.com/files/iMath/qrcode_for_gh_37c790b9caf3_258.bmp" />
+                        <ul id="promotionText">
+                            <li>持续获取最新高数讲解资料，请关注微信公众号：高数变简单</li>
+                            <li>可
+                                <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=9154d65eb9c1cc2b4c60e6f76adc36bc4dd927c517c04d8abe4b19c49eb1a02b"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="iMath数学讨论" title="iMath数学讨论"></a>187255889
+                                讨论本博客里的数学问题
+                            </li>
+                            <li><a id="donation" target="_blank" href="/7198775">希望各位帮我和你认同的大学数学老师建立联系，谢谢！</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+
+
+
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+    <div id="vcomments"></div>
+    <script>
+    new Valine({
+        serverURLs: "https://tdobxtrv.api.lncldglobal.com",
+        el: "#vcomments", //指明js应用到哦啊的元素
+        appId: "TdObXtRvMAQaU3yxb9oQTwJf-MdYXbMMI",
+        appKey: "E4S4iTitrlKDLvYjMYydJ9yf",
+        placeholder: "有问题就点击此处留言~\n①报告视频下载问题的时候请提供【【视频网址】】供我测试\n②记得填邮箱哦，这样如有新回复你就能收到邮件通知",
+        meta: ["mail", "nick"], //用这个是为了去掉默认的网址filed
+        requiredFields: ["mail"],
+        enableQQ: "true",
+        visitor: true, // 阅读量统计
+    });
+
+    </script>
+
+    <script type="text/javascript">
+         //处理Markdown链接跳转到新页面，排出处理页内跳转的链接
+// document.querySelectorAll(".mainContent a:not([href^='#']").forEach(function(link) {
+//     link.target = "_blank";
+// });
+    </script>
+{% endblock postMeta %}
