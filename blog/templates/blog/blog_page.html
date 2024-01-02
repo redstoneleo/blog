@@ -1,5 +1,6 @@
 {% extends "./base.html" %}
 <!-- If you use ---extends-- in a template, it must be the first template tag in that template. Template inheritance won’t work, otherwise. -->
+{% load admin_urls %}
 {% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 {% block mainContent %}
@@ -46,7 +47,7 @@
 
         <!--  编辑 -->
         {% if request.user.is_authenticated %}
-            <a href="/admin/blog/post/{{ post.id }}/change/" rel="nofollow">
+            <a href="{% url 'admin:blog_post_change' post.id %}" rel="nofollow">
                 <svg class="icon" aria-hidden="true" id="icon-bianji">
                     <title>编辑</title>
                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-bianji4"></use>

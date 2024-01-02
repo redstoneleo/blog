@@ -7,7 +7,7 @@
 {% block mainContent %}
     <ul class="postList">
     {% for post in postList %}
-        <li><a class="postTitle" href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></li>
+        <li><a class="postTitle" href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
     {% endfor %}
     </ol>
     <div class="pagination">

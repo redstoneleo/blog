@@ -4,6 +4,11 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.utils import timezone
+from django.contrib import admin
+from django.utils.html import format_html
+from django.urls import reverse
+
+
 from markdown_it import MarkdownIt
 
 from mdit_py_plugins.front_matter import front_matter_plugin
@@ -29,6 +34,12 @@ class Post(models.Model):
 	firstReleaseDate = models.DateTimeField(auto_now_add=True)#default=timezone.now  因为cnblog用的是datetime，所以只能用DateTimeField，否则我想用DateField
 	latestRevisionDate = models.DateTimeField(auto_now=True)#default=timezone.now  
 
+	def get_absolute_url(self):
+		return reverse("blog:detail", kwargs={"slug": self.slug})
+
+	@admin.display(description="view on site")
+	def postLink(self):
+		return format_html(f'''<a href="{self.get_absolute_url()}" target="_blank">view post</a>''')
 
 	def __str__(self):
 	    return self.title
